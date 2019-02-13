@@ -1,5 +1,6 @@
 from room import Room
-
+from player import Player
+from item import Item
 # Declare all the rooms
 
 room = {
@@ -18,7 +19,7 @@ to north. The smell of gold permeates the air."""),
 
     'treasure': Room("Treasure Chamber", """You've found the long-lost treasure
 chamber! Sadly, it has already been completely emptied by
-earlier adventurers. The only exit is to the south."""),
+arlier adventurers. The only exit is to the south."""),
 }
 
 
@@ -38,6 +39,8 @@ room['treasure'].s_to = room['narrow']
 #
 
 # Make a new player object that is currently in the 'outside' room.
+p = Player("Bill", room['outside'])
+print(p)
 
 # Write a loop that:
 #
@@ -49,3 +52,14 @@ room['treasure'].s_to = room['narrow']
 # Print an error message if the movement isn't allowed.
 #
 # If the user enters "q", quit the game.
+player_input = None
+while (player_input is not 'q'):
+    print(f'''You are at the {p.currentRoom.name}:
+'{p.currentRoom.description}.'
+ Please pick a direction to go in (N, E, S, W).''')
+    player_input  = input("Enter your direction: ")
+    previous_room = p.currentRoom
+    p.move(player_input)
+    if p.currentRoom == None:
+        print("You cannot do that punk!")
+        p.currentRoom=previous_room
