@@ -40,6 +40,11 @@ room['treasure'].s_to = room['narrow']
 
 # Make a new player object that is currently in the 'outside' room.
 p = Player("Bill", room['outside'])
+CRED = '\033[91m'
+CBLUE = '\033[34m'
+CGREEN = '\033[92m'
+CEND = '\033[0m'
+print(CRED + str(p) + CEND)
 
 # Write a loop that:
 #
@@ -52,16 +57,42 @@ p = Player("Bill", room['outside'])
 #
 # If the user enters "q", quit the game.
 player_input = None
+# Guaranteed that q exits the game
 while (player_input is not 'q'):
-    print(f'''You are holding {p.items}, and you are at the {p.currentRoom.name} which has the items {p.currentRoom.items}:
-'{p.currentRoom.description}.'
- Please pick a direction to go in (n, e, s, w). Or, you can pick up an item using (p)''')
-    player_input  = input("Enter your direction: ")
+    # print details for the player, color coded for readability
+    print(CGREEN + f'''\nYou are holding {p.items} \n ''' + CEND)
+    print(CBLUE + f'''You are at the {p.currentRoom.name} which has the items {p.currentRoom.items} \n {p.currentRoom.description}. \n''' + CEND)
+    print(CGREEN + f'''Please pick a direction to go in (north, east, south, west). Or, you can pick up an item using (p)''' + CEND)
+    
+    # start of player input
+    player_input  = input(CRED + "\nWhat will you do? >>> " + CEND)
+    #created variable that references currentRoom of player
     previous_room = p.currentRoom
+    # two possibilities for a player to move 
+    # either one word (n or north) or two words, starting with go (go north, go n) 
     if player_input != "p" and player_input != "d":
         p.move(player_input)
-    else:
-        p.itemInteraction(player_input)
+    if player_input.startswith("go "):
+        direction = player_input.split(' ')
+        p.move(direction[1])  
+    # two possibilities for a player to pick up an item
+    # two words, Starting with "get" will pick up the item referenced (get rock)
+    if player_input.startswith("get "):
+        items = player_input.split(' ')
+        p.pickup(items[1])
+    # if just "p", will prompt another input to ask what player wants to pick up
+    if player_input == 'p':
+        player_input = input("What do you want to pick up? ")
+        p.pickup(player_input)
+    # Same logic with drop
+    if player_input.startswith("drop "):
+        items = player_input.split(' ')
+        p.drop(items[1])
+    if player_input == "d":
+        player_input = input("What do you want to drop? ")
+        p.drop(player_input)
+    # Error handling if there is no room in the players stated direction
     if p.currentRoom == None:
         print("You cannot do that punk!")
         p.currentRoom=previous_room
+   
