@@ -29,6 +29,10 @@ class Player:
 
     #reverse logic on drop
     def drop(self, action):
-        if action in self.items:
+        #logic for the player to drop everything in their backpack
+        if action == "everything":
+            self.currentRoom.items.extend(self.items)
+            self.items.clear()
+        elif action in self.items:
             self.items.remove(action)
             self.currentRoom.items.append(action)

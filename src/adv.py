@@ -40,6 +40,7 @@ room['treasure'].s_to = room['narrow']
 
 # Make a new player object that is currently in the 'outside' room.
 p = Player("Bill", room['outside'])
+
 CRED = '\033[91m'
 CBLUE = '\033[34m'
 CGREEN = '\033[92m'
@@ -60,9 +61,27 @@ player_input = None
 # Guaranteed that q exits the game
 while (player_input is not 'q'):
     # print details for the player, color coded for readability
-    print(CGREEN + f'''\nYou are holding {p.items} \n ''' + CEND)
-    print(CBLUE + f'''You are at the {p.currentRoom.name} which has the items {p.currentRoom.items} \n {p.currentRoom.description}. \n''' + CEND)
-    print(CGREEN + f'''Please pick a direction to go in (north, east, south, west). Or, you can pick up an item using (p)''' + CEND)
+    # Check the backpack for items. If no items tell player that
+    if len(p.items) == 0:
+        print(CGREEN + f'''\nThere is nothing in your backpack \n ''' + CEND)
+    # If items are in the backpack, prints out the items
+    else:
+        print(CGREEN + f'''\nBackpack:''' + CEND)
+        for item in p.items:
+            print(f'{item}')
+    print(CBLUE + f'''\nYou are at the {p.currentRoom.name} {p.currentRoom.description}.''' + CEND)
+    # Check for items on the ground. If no items, tels player
+    if len(p.currentRoom.items) == 0: 
+        print(CBLUE + f'Looking around, you do not see anything on the ground' + CEND)
+        print(CGREEN + f'Please pick a direction to go in (north, east, south, west).' + CEND)
+
+    # if items are in the room, prints out the items
+    else:
+        print(CBLUE + f'Looking around, you see:' + CEND)
+        for item in p.currentRoom.items:
+            print(f'a {item}')
+        print(CGREEN + f'''Please pick a direction to go in (north, east, south, west). Or, you can pick up an item''' + CEND)
+    
     
     # start of player input
     player_input  = input(CRED + "\nWhat will you do? >>> " + CEND)
