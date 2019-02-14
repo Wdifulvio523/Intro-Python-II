@@ -2,9 +2,10 @@
 # currently.
 
 class Player: 
-    def __init__(self, name, currentRoom):
+    def __init__(self, name, currentRoom, items=[]):
         self.currentRoom = currentRoom
         self.name = name
+        self.items = items
 
     def move(self, direction):
         if direction == "n":
@@ -15,3 +16,9 @@ class Player:
             self.currentRoom = self.currentRoom.e_to
         if direction == "w":
             self.currentRoom = self.currentRoom.w_to
+
+    def itemInteraction(self, action):
+        if action == 'p':
+            self.items.append(self.currentRoom.items) 
+        if action == 'd':
+            self.items.clear()
